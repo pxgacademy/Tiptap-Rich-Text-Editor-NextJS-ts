@@ -120,15 +120,15 @@
     @apply bg-background text-foreground;
   }
 
-  h1 {
-    @apply text-2xl font-bold;
+  .tiptap h1 {
+    @apply text-2xl font-semibold;
   }
 
-  h2 {
-    @apply text-xl font-bold;
+  .tiptap h2 {
+    @apply text-xl font-semibold;
   }
 
-  h3 {
-    @apply text-lg font-bold;
+  .tiptap h3 {
+    @apply text-lg font-semibold;
   }
 }

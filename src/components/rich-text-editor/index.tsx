@@ -57,7 +57,7 @@ export default function RichTextEditor({
   });
 
   return (
-    <div>
+    <div className="mt-2">
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
     </div>

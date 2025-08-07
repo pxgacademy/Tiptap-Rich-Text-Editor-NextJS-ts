@@ -1,17 +1,11 @@
 "use client";
 
 import BlogPostList from "@/components/layouts/BlogPostList";
-import { useState } from "react";
+import Container from "@/components/layouts/Container";
 
 export default function Home() {
-  const [post, setPost] = useState("");
-
-  const onChange = (content: string) => {
-    setPost(content);
-  };
-
   return (
-    <main className="container mx-auto mt-8">
+    <Container>
       <div className="mb-8">
         <h1 className="text-3xl font-bold">Latest Posts</h1>
         <p className="text-muted-foreground mt-2">
@@ -19,6 +13,6 @@ export default function Home() {
         </p>
       </div>
       <BlogPostList />
-    </main>
+    </Container>
   );
 }
