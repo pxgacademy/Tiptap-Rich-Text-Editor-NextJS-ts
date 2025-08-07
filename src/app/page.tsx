@@ -1,6 +1,6 @@
 "use client";
 
-import RichTextEditor from "@/components/rich-text-editor";
+import BlogPostList from "@/components/layouts/BlogPostList";
 import { useState } from "react";
 
 export default function Home() {
@@ -11,12 +11,14 @@ export default function Home() {
   };
 
   return (
-    <div className="m-5 p-5 max-w-3xl mx-auto bg-gray-100 rounded-lg border border-gray-200 shadow-md">
-      <h1 className="mb-3 text-3xl font-bold font-mono">
-        This is Rich Text Editor
-      </h1>
-
-      <RichTextEditor content={post} onChange={onChange} />
-    </div>
+    <main className="container mx-auto mt-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold">Latest Posts</h1>
+        <p className="text-muted-foreground mt-2">
+          Explore the latest articles and insights
+        </p>
+      </div>
+      <BlogPostList />
+    </main>
   );
 }
