@@ -1,10 +1,18 @@
 "use client";
 
-import { fetcher } from "@/utils/fetcher";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/context/AuthContext";
+import { createUser } from "@/lib/action";
+import { LocalUserInputs } from "@/lib/types";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
+  const { login } = useAuth();
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -19,49 +27,66 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await fetcher("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify(form),
-      });
-      router.push("/login");
-    } catch (err) {
-      alert("Registration failed");
-    }
+    const result = await createUser({
+      email: form.email,
+      password: form.password,
+      firstName: form.firstName,
+      lastName: form.lastName,
+    });
+
+    if (result.success) {
+      toast.success(result.message);
+      const { id, email, firstName, lastName } = result.data as LocalUserInputs;
+      login({ id, email, firstName, lastName });
+      router.push("/");
+    } else toast.error(result.message);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 space-y-4 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold">Register</h2>
-      <input
-        name="firstName"
-        placeholder="First Name"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="lastName"
-        placeholder="Last Name"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="Password"
-        onChange={handleChange}
-        required
-      />
-      <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-        Register
-      </button>
-    </form>
+    <div className="p-4 max-w-md mx-auto border  rounded-xl mt-8">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <h2 className="text-2xl font-bold text-center uppercase">Register</h2>
+        <Input
+          name="firstName"
+          placeholder="First Name"
+          onChange={handleChange}
+          required
+        />
+
+        <Input
+          name="lastName"
+          placeholder="Last Name"
+          onChange={handleChange}
+          required
+        />
+
+        <Input
+          name="email"
+          type="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+
+        <Input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+        />
+
+        <div className="flex justify-center">
+          <Button type="submit">Register</Button>
+        </div>
+      </form>
+
+      <p className="text-center mt-4">
+        Already have an account?{" "}
+        <Link href="/login" className="text-blue-500">
+          Login
+        </Link>
+      </p>
+    </div>
   );
 }
