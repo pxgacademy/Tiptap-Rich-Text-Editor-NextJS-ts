@@ -1,23 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
-
 import prisma from "@/lib/db";
-import { hashPassword } from "@/utils/auth";
+import { hashPassword } from "@/lib/hash";
+import { NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const { firstName, lastName, email, password } = await req.json();
+export async function POST(req: Request) {
+  const { email, password, firstName, lastName } = await req.json();
 
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser)
-    return NextResponse.json(
-      { message: "Email already in use" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "User already exists" }, { status: 400 });
 
-  const hashedPassword = await hashPassword(password);
+  const hashed = await hashPassword(password);
 
   const user = await prisma.user.create({
-    data: { firstName, lastName, email, password: hashedPassword },
+    data: { email, password: hashed, firstName, lastName },
   });
 
-  return NextResponse.json({ user });
+  return NextResponse.json({ message: "User registered", user });
 }

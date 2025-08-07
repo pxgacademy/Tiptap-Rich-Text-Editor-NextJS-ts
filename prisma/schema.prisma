@@ -4,7 +4,6 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
-
 /*
 
 pnpm dlx prisma generate         # Client build করবে
@@ -13,9 +12,6 @@ pnpm dlx prisma studio           # DB explorer
 pnpm dlx prisma db push
 
 */
-
-
-
 
 generator client {
   provider = "prisma-client-js"
@@ -28,25 +24,22 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  firstName     String?
-  lastName      String?
-  profileImage  String?
-  password      String
-  Post          Post[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  password  String
+  Post      Post[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Post {
-  id            String    @id @default(cuid())
-  title         String
-  content       String
-  author        User      @relation(fields: [authorId], references: [id])
-  authorId      String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-
