@@ -4,6 +4,19 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+
+/*
+
+pnpm dlx prisma generate         # Client build করবে
+pnpm dlx prisma migrate dev      # DB migrate করবে
+pnpm dlx prisma studio           # DB explorer
+pnpm dlx prisma db push
+
+*/
+
+
+
+
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
