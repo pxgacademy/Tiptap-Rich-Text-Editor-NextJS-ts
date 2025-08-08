@@ -1,5 +1,3 @@
-// rich-text-editor/index.tsx
-
 "use client";
 
 import Highlight from "@tiptap/extension-highlight";
@@ -54,7 +52,7 @@ export default function RichTextEditor({
     content,
 
     onUpdate: ({ editor }) => {
-      if (onchange) onChange(editor.getHTML());
+      onChange?.(editor.getHTML());
     },
 
     // Don't render immediately on the server to avoid SSR issues

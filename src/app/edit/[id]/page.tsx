@@ -1,18 +1,11 @@
 //
 
 import Container from "@/components/layouts/Container";
-import PostDetails from "@/components/layouts/PostDetails";
-import { Post as PrismaPost, User } from "@/generated/prisma";
+import EditPostComponent from "@/components/layouts/EditPostComponent";
 import { getPostById } from "@/lib/action";
 import { notFound } from "next/navigation";
 
-interface Post extends PrismaPost {
-  author: User;
-}
-
-type iBlogPostProps = Post;
-
-export default async function PostPage(props: {
+export default async function EdiPost(props: {
   params: Promise<{ id: string }>;
 }) {
   const params = await props.params;
@@ -23,7 +16,12 @@ export default async function PostPage(props: {
 
   return (
     <Container>
-      <PostDetails post={post.data as iBlogPostProps} />
+      <EditPostComponent
+        id={id}
+        oldTitle={post.data?.title || ""}
+        oldContent={post.data?.content || ""}
+        authorId={post.data?.authorId || ""}
+      />
     </Container>
   );
 }

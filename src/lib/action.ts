@@ -1,5 +1,6 @@
 "use server";
 
+import { Post } from "@/generated/prisma";
 import { comparePassword, hashPassword } from "@/utils/auth";
 import prisma from "./db";
 import { CreatePostInputs, CreateUserInputs } from "./types";
@@ -27,6 +28,43 @@ export async function createPost(data: CreatePostInputs) {
 }
 
 // --------------------
+// Update a Post by id
+// --------------------
+export async function updatePost(id: string, data: Partial<Post>) {
+  try {
+    const post = await prisma.post.update({
+      where: { id },
+      data: {
+        title: data.title,
+        content: data.content,
+        updatedAt: new Date(),
+      },
+    });
+
+    if (!post) {
+      return {
+        success: false,
+        message: "Post not found",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Post updated successfully",
+      data: post,
+    };
+  } catch (error) {
+    console.error("Error updating post:", error);
+    return {
+      success: false,
+      message: "Failed to update post",
+      data: null,
+    };
+  }
+}
+
+// --------------------
 // Get a Post by id
 // --------------------
 export async function getPostById(id: string) {
@@ -40,7 +78,7 @@ export async function getPostById(id: string) {
       return {
         success: false,
         message: "Post not found",
-        data: post,
+        data: null,
       };
     }
 
