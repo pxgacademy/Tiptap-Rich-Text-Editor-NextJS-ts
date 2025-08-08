@@ -20,3 +20,8 @@ pnpm add -D prettier prettier-plugin-prisma
 isomorphic-dompurify
 pnpm add isomorphic-dompurify
 
+
+
+pnpm prisma db pull
+pnpm prisma db push
+pnpm prisma studio

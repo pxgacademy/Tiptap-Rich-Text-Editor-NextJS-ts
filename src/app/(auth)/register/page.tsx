@@ -12,6 +12,7 @@ import { toast } from "sonner";
 
 export default function RegisterPage() {
   const { login } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -27,19 +28,30 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await createUser({
-      email: form.email,
-      password: form.password,
-      firstName: form.firstName,
-      lastName: form.lastName,
-    });
+    setIsSubmitting(true);
+    try {
+      const result = await createUser({
+        email: form.email,
+        password: form.password,
+        firstName: form.firstName,
+        lastName: form.lastName,
+      });
 
-    if (result.success) {
-      toast.success(result.message);
-      const { id, email, firstName, lastName } = result.data as LocalUserInputs;
-      login({ id, email, firstName, lastName });
-      router.push("/");
-    } else toast.error(result.message);
+      if (result.success) {
+        toast.success(result.message);
+        const { id, email, firstName, lastName } =
+          result.data as LocalUserInputs;
+        login({ id, email, firstName, lastName });
+        router.push("/");
+      } else toast.error(result.message);
+    } catch (error) {
+      console.log("Error from registering user ui: ", error);
+      toast.error("Something error with registering", {
+        description: error instanceof Error && error.message,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,7 +89,9 @@ export default function RegisterPage() {
         />
 
         <div className="flex justify-center">
-          <Button type="submit">Register</Button>
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Registering..." : "Register"}
+          </Button>
         </div>
       </form>
 

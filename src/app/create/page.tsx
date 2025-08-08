@@ -7,6 +7,7 @@ import RichTextEditor from "@/components/rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/AuthContext";
 import { createPost } from "@/lib/action";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 export default function CreatePage() {
+  const { user, loading } = useAuth();
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -22,11 +24,15 @@ export default function CreatePage() {
     e.preventDefault();
     setIsSubmitting(true);
 
+    if (!user || !user.id) {
+      return toast.error("Unauthorized user");
+    }
+
     try {
       const result = await createPost({
         title,
         content,
-        authorId: Date.now().toString(),
+        authorId: user.id,
       });
 
       if (result.success) {
@@ -45,6 +51,13 @@ export default function CreatePage() {
       setIsSubmitting(false);
     }
   };
+
+  if (loading)
+    return (
+      <Container>
+        <div>Loading...</div>
+      </Container>
+    );
 
   return (
     <Container>

@@ -57,9 +57,7 @@ export default function BlogPostList() {
               <div>
                 <span>{`${author.firstName} ${author.lastName}`}</span>
                 <span> . </span>
-                <time dateTime={createdAt.toISOString()}>
-                  {formatDate(createdAt)}
-                </time>
+                <time>{formatDate(createdAt)}</time>
               </div>
             </CardFooter>
           </Card>
