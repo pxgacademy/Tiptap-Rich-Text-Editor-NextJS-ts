@@ -30,7 +30,7 @@ export default function BlogPostList({ posts }: iBlogPostProps) {
               <CardTitle>{title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div>
+              <div className="text-muted-foreground line-clamp-2">
                 {DOMPurify.sanitize(content, {
                   ALLOWED_TAGS: [],
                 })}

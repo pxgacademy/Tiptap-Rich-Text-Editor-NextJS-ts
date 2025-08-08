@@ -65,6 +65,36 @@ export async function updatePost(id: string, data: Partial<Post>) {
 }
 
 // --------------------
+// Delete a Post by id
+// --------------------
+export async function deletePost(id: string) {
+  try {
+    const post = await prisma.post.delete({ where: { id } });
+
+    if (!post) {
+      return {
+        success: false,
+        message: "Post not found",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Post deleted successfully",
+      data: null,
+    };
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return {
+      success: false,
+      message: "Failed to delete post",
+      data: null,
+    };
+  }
+}
+
+// --------------------
 // Get a Post by id
 // --------------------
 export async function getPostById(id: string) {
@@ -92,6 +122,39 @@ export async function getPostById(id: string) {
     return {
       success: false,
       message: "Failed to get the post",
+      data: null,
+    };
+  }
+}
+
+// --------------------
+// Get my posts by id
+// --------------------
+export async function getMyPosts(id: string) {
+  try {
+    const posts = await prisma.post.findMany({
+      where: { authorId: id },
+      include: { author: true },
+    });
+
+    if (!posts) {
+      return {
+        success: false,
+        message: "Post not found",
+        data: null,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Posts retrieved successfully",
+      data: posts,
+    };
+  } catch (error) {
+    console.error("Error getting my posts:", error);
+    return {
+      success: false,
+      message: "Failed to get my posts",
       data: null,
     };
   }
