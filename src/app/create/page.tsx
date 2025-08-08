@@ -11,6 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 import { createPost } from "@/lib/action";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ export default function CreatePage() {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -37,7 +39,7 @@ export default function CreatePage() {
 
       if (result.success) {
         toast.success("Post created successfully");
-        // Router.push('/')
+        router.push("/");
       } else {
         toast.error("Failed to create post");
       }
@@ -61,13 +63,12 @@ export default function CreatePage() {
 
   return (
     <Container>
-      <div className="">
-        <Link href={"/"}>
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="me-1.5" /> Back
-          </Button>
-        </Link>
-      </div>
+      <Link href={"/"}>
+        <Button variant="outline" size="sm">
+          <ArrowLeft className="me-1.5" /> Back
+        </Button>
+      </Link>
+
       <h1 className="my-5">Create New Post</h1>
 
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">

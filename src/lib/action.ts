@@ -27,6 +27,39 @@ export async function createPost(data: CreatePostInputs) {
 }
 
 // --------------------
+// Get a Post by id
+// --------------------
+export async function getPostById(id: string) {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id },
+      include: { author: true },
+    });
+
+    if (!post) {
+      return {
+        success: false,
+        message: "Post not found",
+        data: post,
+      };
+    }
+
+    return {
+      success: true,
+      message: "Post retrieved successfully",
+      data: post,
+    };
+  } catch (error) {
+    console.error("Error getting single post:", error);
+    return {
+      success: false,
+      message: "Failed to get the post",
+      data: null,
+    };
+  }
+}
+
+// --------------------
 // Create a New User
 // --------------------
 export async function createUser(data: CreateUserInputs) {

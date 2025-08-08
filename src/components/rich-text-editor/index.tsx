@@ -10,14 +10,17 @@ import MenuBar from "./menu_bar";
 
 interface RichTextEditorProps {
   content: string;
-  onChange: (content: string) => void;
+  onChange?: (content: string) => void;
+  editable?: boolean;
 }
 
 export default function RichTextEditor({
   content,
   onChange,
+  editable = true,
 }: RichTextEditorProps) {
   const editor = useEditor({
+    editable,
     extensions: [
       StarterKit.configure({
         bulletList: {
@@ -42,14 +45,16 @@ export default function RichTextEditor({
 
     editorProps: {
       attributes: {
-        class: "min-h-[156px] border rounded-md p-3 bg-background",
+        class: editable
+          ? "min-h-[156px] border rounded-md p-3 bg-background"
+          : "",
       },
     },
 
     content,
 
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      if (onchange) onChange(editor.getHTML());
     },
 
     // Don't render immediately on the server to avoid SSR issues
@@ -58,7 +63,7 @@ export default function RichTextEditor({
 
   return (
     <div className="mt-2">
-      <MenuBar editor={editor} />
+      {editable && <MenuBar editor={editor} />}
       <EditorContent editor={editor} />
     </div>
   );
